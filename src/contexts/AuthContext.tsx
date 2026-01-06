@@ -15,8 +15,17 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
+  updateProfile: (data: UpdateProfileData) => Promise<void>;
   logout: () => void;
   hasPermission: (permission: string) => boolean;
+}
+
+export interface UpdateProfileData {
+  names?: string;
+  surnames?: string;
+  email?: string;
+  phone?: string | null;
+  role?: string;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -75,6 +84,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const updateProfile = async (data: UpdateProfileData) => {
+    const updatedUser = await AuthAPI.updateInfoProfile(data);
+
+    // Actualizar el estado local
+    setUser(updatedUser);
+
+    // Actualizar localStorage
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -83,6 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         login,
         logout,
+        updateProfile,
         hasPermission: (permission: string) => true,
       }}
     >

@@ -1,7 +1,18 @@
-import { Search, Bell, ChevronDown, Menu, Plus, Command, Settings, LogOut, User, HelpCircle } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import {
+  Search,
+  Bell,
+  ChevronDown,
+  Menu,
+  Plus,
+  Command,
+  Settings,
+  LogOut,
+  User,
+  HelpCircle,
+} from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -9,11 +20,11 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(false);
-  
+
   const notifRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
   const quickRef = useRef<HTMLDivElement>(null);
@@ -21,37 +32,81 @@ export function Header({ onMenuClick }: HeaderProps) {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+      if (
+        notifRef.current &&
+        !notifRef.current.contains(event.target as Node)
+      ) {
         setShowNotifications(false);
       }
       if (userRef.current && !userRef.current.contains(event.target as Node)) {
         setShowUserMenu(false);
       }
-      if (quickRef.current && !quickRef.current.contains(event.target as Node)) {
+      if (
+        quickRef.current &&
+        !quickRef.current.contains(event.target as Node)
+      ) {
         setShowQuickActions(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const notifications = [
-    { id: 1, title: 'Nuevo lead asignado', desc: 'Ana García - Proyecto residencial', time: '5 min', unread: true },
-    { id: 2, title: 'Cotización aprobada', desc: 'Cliente: Solar Tech SA', time: '1 hora', unread: true },
-    { id: 3, title: 'Recordatorio de seguimiento', desc: 'Lead: Instalación comercial', time: '2 horas', unread: false },
+    {
+      id: 1,
+      title: "Nuevo lead asignado",
+      desc: "Ana García - Proyecto residencial",
+      time: "5 min",
+      unread: true,
+    },
+    {
+      id: 2,
+      title: "Cotización aprobada",
+      desc: "Cliente: Solar Tech SA",
+      time: "1 hora",
+      unread: true,
+    },
+    {
+      id: 3,
+      title: "Recordatorio de seguimiento",
+      desc: "Lead: Instalación comercial",
+      time: "2 horas",
+      unread: false,
+    },
   ];
 
   const quickActions = [
-    { label: 'Crear Lead', path: '/leads', color: 'text-[#3B82F6]', bg: 'bg-[#EFF6FF]' },
-    { label: 'Nueva Cotización', path: '/quote/new', color: 'text-[#10B981]', bg: 'bg-[#D1FAE5]' },
-    { label: 'Agregar Cliente', path: '/clientes/nuevo', color: 'text-[#F59E0B]', bg: 'bg-[#FEF3C7]' },
-    { label: 'Orden de Servicio', path: '/ordenes/nuevo', color: 'text-[#8B5CF6]', bg: 'bg-[#EDE9FE]' },
+    {
+      label: "Crear Lead",
+      path: "/leads",
+      color: "text-[#3B82F6]",
+      bg: "bg-[#EFF6FF]",
+    },
+    {
+      label: "Nueva Cotización",
+      path: "/quote/new",
+      color: "text-[#10B981]",
+      bg: "bg-[#D1FAE5]",
+    },
+    {
+      label: "Agregar Cliente",
+      path: "/clientes/nuevo",
+      color: "text-[#F59E0B]",
+      bg: "bg-[#FEF3C7]",
+    },
+    {
+      label: "Orden de Servicio",
+      path: "/ordenes/nuevo",
+      color: "text-[#8B5CF6]",
+      bg: "bg-[#EDE9FE]",
+    },
   ];
 
   return (
@@ -68,13 +123,20 @@ export function Header({ onMenuClick }: HeaderProps) {
           </button>
 
           {/* Logo */}
-          <NavLink to="/dashboard" className="flex items-center gap-3 flex-shrink-0">
+          <NavLink
+            to="/dashboard"
+            className="flex items-center gap-3 flex-shrink-0"
+          >
             <div className="w-10 h-10 bg-gradient-to-br from-[#3B82F6] to-[#2563EB] rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
               <span className="text-white text-lg">⚡</span>
             </div>
             <div className="hidden sm:flex flex-col">
-              <span className="text-[#1E293B] leading-none mt-[0px] mr-[0px] mb-[2px] ml-[0px]">CRM Geonova</span>
-              <span className="text-[10px] text-[#64748B] leading-none">Sistema de Gestión</span>
+              <span className="text-[#1E293B] leading-none mt-[0px] mr-[0px] mb-[2px] ml-[0px]">
+                CRM Geonova
+              </span>
+              <span className="text-[10px] text-[#64748B] leading-none">
+                Sistema de Gestión
+              </span>
             </div>
           </NavLink>
         </div>
@@ -121,10 +183,14 @@ export function Header({ onMenuClick }: HeaderProps) {
                     onClick={() => setShowQuickActions(false)}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-[#F8FAFC] transition-colors"
                   >
-                    <div className={`w-8 h-8 ${action.bg} ${action.color} rounded-lg flex items-center justify-center`}>
+                    <div
+                      className={`w-8 h-8 ${action.bg} ${action.color} rounded-lg flex items-center justify-center`}
+                    >
                       <Plus className="w-4 h-4" />
                     </div>
-                    <span className="text-sm text-[#1E293B]">{action.label}</span>
+                    <span className="text-sm text-[#1E293B]">
+                      {action.label}
+                    </span>
                   </NavLink>
                 ))}
               </div>
@@ -147,7 +213,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm text-[#1E293B]">Notificaciones</h3>
                     <span className="px-2 py-0.5 bg-[#3B82F6] text-white text-[10px] rounded-full">
-                      {notifications.filter(n => n.unread).length}
+                      {notifications.filter((n) => n.unread).length}
                     </span>
                   </div>
                 </div>
@@ -156,19 +222,23 @@ export function Header({ onMenuClick }: HeaderProps) {
                     <div
                       key={notif.id}
                       className={`px-4 py-3 border-b border-[#E2E8F0] hover:bg-[#F8FAFC] transition-colors cursor-pointer ${
-                        notif.unread ? 'bg-[#EFF6FF]/50' : ''
+                        notif.unread ? "bg-[#EFF6FF]/50" : ""
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1">
-                          <p className="text-sm text-[#1E293B] mb-1">{notif.title}</p>
+                          <p className="text-sm text-[#1E293B] mb-1">
+                            {notif.title}
+                          </p>
                           <p className="text-xs text-[#64748B]">{notif.desc}</p>
                         </div>
                         {notif.unread && (
                           <div className="w-2 h-2 bg-[#3B82F6] rounded-full mt-1.5"></div>
                         )}
                       </div>
-                      <span className="text-[10px] text-[#94A3B8] mt-2 block">{notif.time}</span>
+                      <span className="text-[10px] text-[#94A3B8] mt-2 block">
+                        {notif.time}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -188,7 +258,10 @@ export function Header({ onMenuClick }: HeaderProps) {
               className="flex items-center gap-2 pl-2 pr-3 h-10 hover:bg-[#F8FAFC] rounded-lg transition-colors"
             >
               <div className="w-8 h-8 bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white text-sm">JD</span>
+                <span className="text-white text-sm">
+                  {user?.names.charAt(0)}
+                  {user?.surnames.charAt(0)}
+                </span>
               </div>
               <ChevronDown className="w-4 h-4 text-[#64748B] hidden sm:block" />
             </button>
@@ -196,10 +269,12 @@ export function Header({ onMenuClick }: HeaderProps) {
             {showUserMenu && (
               <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-[#E2E8F0] py-2 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="px-4 py-3 border-b border-[#E2E8F0]">
-                  <p className="text-sm text-[#1E293B]">Juan Pérez</p>
-                  <p className="text-xs text-[#64748B]">juan.perez@crmpro.com</p>
+                  <p className="text-sm text-[#1E293B]">
+                    {user?.names} {user?.surnames}
+                  </p>
+                  <p className="text-xs text-[#64748B]">{user?.email}</p>
                 </div>
-                
+
                 <div className="py-2">
                   <NavLink
                     to="/configuracion"
@@ -215,11 +290,15 @@ export function Header({ onMenuClick }: HeaderProps) {
                     className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#F8FAFC] transition-colors"
                   >
                     <Settings className="w-4 h-4 text-[#64748B]" />
-                    <span className="text-sm text-[#1E293B]">Configuración</span>
+                    <span className="text-sm text-[#1E293B]">
+                      Configuración
+                    </span>
                   </NavLink>
                   <button className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-[#F8FAFC] transition-colors">
                     <HelpCircle className="w-4 h-4 text-[#64748B]" />
-                    <span className="text-sm text-[#1E293B]">Ayuda y soporte</span>
+                    <span className="text-sm text-[#1E293B]">
+                      Ayuda y soporte
+                    </span>
                   </button>
                 </div>
 
